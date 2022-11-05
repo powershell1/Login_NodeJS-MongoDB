@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login</title>
+</head>
+<body>
+    <input placeholder="Enter your username" type="text">
+    <input placeholder="Enter your password" type="password">
+    <input type="checkbox">
+    <input value="SignIn" type="button">
+    <script>
+        var locate = document.location;
+        var mainurl = "";
+
+        var userquery = document.querySelector("input[type='text']");
+        var passquery = document.querySelector("input[type='password']");
+        var isremquery = document.querySelector("input[type='checkbox']");
+        var buttonquery = document.querySelector("input[type='button']");
+
+        async function Login(user, pass, isrem) {
+            var nowlocation = `${locate.protocol}//${locate.host}`;
+            var data = await fetch(`${nowlocation}/private-api/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: user,
+                    password: pass,
+                    remember: isrem
+                }),
+            });
+            var datajson = await data.json();
+            if (datajson["status"] == "error") {
+                alert(datajson["message"]);
+            } else {
+                alert("Login Success");
+                alert(JSON.stringify(datajson));
+            };
+        };
+
+        buttonquery.addEventListener("click", function() {
+            Login(userquery.value, passquery.value, (isremquery.value == "on"));
+        });
+    </script>
+</body>
+</html>

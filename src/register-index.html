@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Test</title>
+</head>
+<body>
+    <input placeholder="Enter your username" type="text">
+    <input placeholder="Enter your email" type="email">
+    <input placeholder="Enter your password" type="password" id="pass1">
+    <input placeholder="Confirm your password" type="password" id="pass2">
+    <input value="Register" type="button">
+    <script>
+        var locate = document.location;
+        var mainurl = "";
+
+        var userquery = document.querySelector("input[type='text']");
+        var gmailquery = document.querySelector("input[type='email']");
+        var passquery = document.getElementById("pass1");
+        var passconquery = document.getElementById("pass2");
+        var buttonquery = document.querySelector("input[type='button']");
+
+        async function Login(user, gmail, pass) {
+            var nowlocation = `${locate.protocol}//${locate.host}`;
+            var data = await fetch(`${nowlocation}/private-api/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: user,
+                    password: pass,
+                    email: gmail
+                }),
+            });
+            var datajson = await data.json();
+            if (datajson["status"] == "error") {
+                alert(datajson["message"]);
+            } else {
+                alert("Register Success");
+                alert(JSON.stringify(datajson));
+            };
+        };
+
+        buttonquery.addEventListener("click", function() {
+            if (passquery.value == passconquery.value) {
+                Login(userquery.value, gmailquery.value, passquery.value);
+            } else {
+                alert("Password not match");
+            };
+        });
+    </script>
+</body>
+</html>
