@@ -1,3 +1,11 @@
+// config
+var cloudurl = 'Enter your mongoDB uri here (mongodb+srv://<username>:<password>@cluster123456.mongodb.net)';
+var databasename = 'Enter your database name here';
+var collectionname = 'Enter your collection name here';
+
+
+
+// script
 const express = require('express');
 const { MongoClient } = require('mongodb');
 const cookieParser = require('cookie-parser');
@@ -12,8 +20,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-const databases = '// Enter your mongoDB uri here (mongodb+srv://<username>:<password>@cluster123456.mongodb.net)';
-const client = new MongoClient(databases);
+const client = new MongoClient(clusterurl);
 
 var portopen = 3000;
 
@@ -23,10 +30,20 @@ var DataBasesSaved;
 var WebDataStore;
 
 app.get('/login', (req, res) => {
+    var rememberlogin = req.cookies['remember-login'];
+    if (rememberlogin) {
+        res.sendFile(path.join(__dirname, 'src', 'waslogin-index.html'));
+        return;
+    };
     res.sendFile(path.join(__dirname, 'src', 'login-index.html'));
 });
 
 app.get('/register', (req, res) => {
+    var rememberlogin = req.cookies['remember-login'];
+    if (rememberlogin) {
+        res.sendFile(path.join(__dirname, 'src', 'waslogin-index.html'));
+        return;
+    };
     res.sendFile(path.join(__dirname, 'src', 'register-index.html'));
 });
 
@@ -102,8 +119,8 @@ app.post('/private-api/register', async (req, res) => {
 
 (async () => {
     await client.connect();
-    DataBasesSaved = client.db('DataSave');
-    WebDataStore = DataBasesSaved.collection('WebsideDataStore');
+    DataBasesSaved = client.db(databasename);
+    WebDataStore = DataBasesSaved.collection(collectionname);
     app.listen(portopen, () => {
         console.log(`Server started on port ${portopen}`);
     });
