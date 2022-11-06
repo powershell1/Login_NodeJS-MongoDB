@@ -3,5 +3,5 @@ Function | Available
 ----- | -----
 login | :white_check_mark:
 register | :white_check_mark:
-reset password | :negative_squared_cross_mark:
+reset password | :x:
 remeber | :white_check_mark:
